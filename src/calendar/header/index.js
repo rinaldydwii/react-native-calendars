@@ -22,7 +22,8 @@ class CalendarHeader extends Component {
     hideDayNames: PropTypes.bool,
     weekNumbers: PropTypes.bool,
     onPressArrowLeft: PropTypes.func,
-    onPressArrowRight: PropTypes.func
+    onPressArrowRight: PropTypes.func,
+    uppercaseHeaderDay: PropTypes.bool
   };
 
   static defaultProps = {
@@ -134,9 +135,15 @@ class CalendarHeader extends Component {
           !this.props.hideDayNames &&
           <View style={this.style.week}>
             {this.props.weekNumbers && <Text allowFontScaling={false} style={this.style.dayHeader}></Text>}
-            {weekDaysNames.map((day, idx) => (
-              <Text allowFontScaling={false} key={idx} accessible={false} style={this.style.dayHeader} numberOfLines={1} importantForAccessibility='no'>{day}</Text>
-            ))}
+            {weekDaysNames.map((day, idx) => {
+              let finalDay = this.props.uppercaseHeaderDay ? day.toUpperCase() : day;
+              let finalStyle = day == 'Sun' ? [this.style.dayHeader, this.style.holidayText] : this.style.dayHeader;
+              return (
+                <Text allowFontScaling={false} key={idx} accessible={false} style={finalStyle} numberOfLines={1} importantForAccessibility='no'>
+                  {finalDay}
+                </Text>
+              )
+            })}
           </View>
         }
       </View>

@@ -10,6 +10,7 @@ import dateutils from '../dateutils';
 import {xdateToData, parseDate} from '../interface';
 import styleConstructor from './style';
 import Day from './day/basic';
+import Holiday from './holiday';
 import UnitDay from './day/period';
 import MultiDotDay from './day/multi-dot';
 import MultiPeriodDay from './day/multi-period';
@@ -75,7 +76,10 @@ class Calendar extends Component {
     // Handler which gets executed when press arrow icon left. It receive a callback can go back month
     onPressArrowLeft: PropTypes.func,
     // Handler which gets executed when press arrow icon left. It receive a callback can go next month
-    onPressArrowRight: PropTypes.func
+    onPressArrowRight: PropTypes.func,
+    // CUSTOM PROPS
+    // Uppercase header
+    uppercaseHeaderDay: PropTypes.bool
   };
 
   constructor(props) {
@@ -130,7 +134,9 @@ class Calendar extends Component {
     const day = parseDate(date);
     const minDate = parseDate(this.props.minDate);
     const maxDate = parseDate(this.props.maxDate);
-    if (!(minDate && !dateutils.isGTE(day, minDate)) && !(maxDate && !dateutils.isLTE(day, maxDate))) {
+    const dates = this.getDateMarking(day);
+    const isDisabled = typeof dates.disabled !== 'undefined' ? dates.disabled : false;
+    if (!(minDate && !dateutils.isGTE(day, minDate)) && !(maxDate && !dateutils.isLTE(day, maxDate)) && !(isDisabled)) {
       const shouldUpdateMonth = this.props.disableMonthChange === undefined || !this.props.disableMonthChange;
       if (shouldUpdateMonth) {
         this.updateMonth(day);
@@ -160,9 +166,12 @@ class Calendar extends Component {
     if (this.props.disabledByDefault) {
       state = 'disabled';
     } else if ((minDate && !dateutils.isGTE(day, minDate)) || (maxDate && !dateutils.isLTE(day, maxDate))) {
-      state = 'disabled';
+      if (day.getDay() === 0) state = 'disabledHoliday'
+      else state = 'disabled';
     } else if (!dateutils.sameMonth(day, this.state.currentMonth)) {
       state = 'disabled';
+    } else if ( day.getDay() === 0) {
+      state = 'holiday';
     } else if (dateutils.sameDate(day, XDate())) {
       state = 'today';
     }
@@ -237,9 +246,30 @@ class Calendar extends Component {
     return (<View style={this.style.week} key={id}>{week}</View>);
   }
 
+  renderHoliday(day, id) {
+    return (
+      <Holiday 
+        theme={this.props.theme}
+        key={id}
+        date={parseDate(day).toString('MMM') + " " + day.getDate()}
+        marking={this.getDateMarking(day)}
+      />
+    )
+  }
+
+  renderHolidays(days) {
+    const holidays = [];
+    days.forEach((day, id2) => {
+      holidays.push(this.renderHoliday(day, id2));
+    });
+
+    return holidays;
+  }
+
   render() {
     const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
     const weeks = [];
+    const holidayDescription = this.renderHolidays(days);
     while (days.length) {
       weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
     }
@@ -267,8 +297,10 @@ class Calendar extends Component {
           weekNumbers={this.props.showWeekNumbers}
           onPressArrowLeft={this.props.onPressArrowLeft}
           onPressArrowRight={this.props.onPressArrowRight}
+          uppercaseHeaderDay={this.props.uppercaseHeaderDay}
         />
         <View style={this.style.monthView}>{weeks}</View>
+        <View style={this.style.holidayDescView}>{holidayDescription}</View>
       </View>);
   }
 }

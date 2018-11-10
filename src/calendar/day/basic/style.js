@@ -9,10 +9,11 @@ export default function styleConstructor(theme={}) {
     base: {
       width: 32,
       height: 32,
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     text: {
-      marginTop: Platform.OS === 'android' ? 4 : 6,
+      marginTop: Platform.OS === 'android' ? 0 : 6,
       fontSize: appStyle.textDayFontSize,
       fontFamily: appStyle.textDayFontFamily,
       fontWeight: '300',
@@ -37,6 +38,12 @@ export default function styleConstructor(theme={}) {
     },
     disabledText: {
       color: appStyle.textDisabledColor
+    },
+    holidayText: {
+      color: appStyle.holidayTextColor
+    },
+    disabledHolidayText: {
+      color: appStyle.disabledHolidayTextColor
     },
     dot: {
       width: 4,

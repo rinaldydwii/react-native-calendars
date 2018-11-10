@@ -20,6 +20,9 @@ export default function getStyle(theme={}) {
       flexDirection: 'row',
       justifyContent: 'space-around'
     },
+    holidayDescView: {
+      padding: 15
+    },
     ...(theme[STYLESHEET_ID] || {})
   });
 }

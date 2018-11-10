@@ -47,6 +47,9 @@ export default function(theme={}) {
       fontFamily: appStyle.textDayHeaderFontFamily,
       color: appStyle.textSectionTitleColor
     },
+    holidayText: {
+      color: appStyle.holidayTextColor
+    },
     ...(theme[STYLESHEET_ID] || {})
   });
 }

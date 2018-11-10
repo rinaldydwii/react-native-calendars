@@ -16,12 +16,14 @@ export const textSecondaryColor = '#7a92a5';
 export const textDayFontFamily = 'System';
 export const textMonthFontFamily = 'System';
 export const textDayHeaderFontFamily = 'System';
+export const textHolidayFontFamily = 'System';
 
 export const textMonthFontWeight = '300';
 
 export const textDayFontSize = 16;
 export const textMonthFontSize = 16;
 export const textDayHeaderFontSize = 13;
+export const textHolidayFontSize = 14;
 
 export const calendarBackground = foregroundColor;
 export const textSectionTitleColor = '#b6c1cd';
@@ -39,3 +41,6 @@ export const agendaDayTextColor = '#7a92a5';
 export const agendaDayNumColor = '#7a92a5';
 export const agendaTodayColor = textLinkColor;
 export const agendaKnobColor = Platform.OS === 'ios' ? '#f2F4f5' : '#4ac4f7';
+export const holidayTextColor = '#FF0000';
+export const disabledHolidayTextColor = 'rgba(255, 0, 0, 0.4)';
+export const holidayDescTextColor = textDefaultColor;
